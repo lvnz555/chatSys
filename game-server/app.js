@@ -1,6 +1,7 @@
 var pomelo  = require('pomelo');
 var fs      = require('fs')
 var path    = require('path')
+var routeUtil   = require('./app/util/routeUtil')
 /**
  * Init app for client.
  */
@@ -8,19 +9,18 @@ var app = pomelo.createApp();
 app.set('name', 'chatSys');
 
 // app configuration
-app.configure('production|development', 'connector', function(){
-  app.set('connectorConfig',
-    {
-      connector : pomelo.connectors.hybridconnector,
-      heartbeat : 3,
-      useDict : true,
-      useProtobuf : true
-    });
-  app.set('redisConfig', {
-      host : '120.77.202.64',
-      port : 6379,
-      db : 0
-  })
+app.configure('production|development', 'connector|chat', function(){
+    if(app.settings.serverType === 'connector'){
+        app.route('chat', routeUtil.chat);
+        app.set('connectorConfig', {
+            connector : pomelo.connectors.hybridconnector
+        });
+    }
+    app.set('redisConfig', {
+        host : '120.77.202.64',
+        port : 6379,
+        db : 0
+    })
 });
 
 fs.readdirSync(__dirname + '/app/lib').forEach(function (filename) {

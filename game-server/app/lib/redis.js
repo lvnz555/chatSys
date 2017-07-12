@@ -9,11 +9,69 @@ module.exports = function (app, opts) {
     opts.host = opts.host || "127.0.0.1";
     opts.port = opts.port || 6379;
 
-    var redisClient = redis.createClient(opts);
+    return new Component(app, opts);
+}
 
-    redisClient.on('error', function (err) {
+var Component = function(app, opts) {
+    this.app = app;
+    this.opts = opts;
+
+    this.key = 'uid-sid'
+
+    this.redisClient = redis.createClient(opts);
+
+    this.redisClient.on('error', function (err) {
         console.log('redis error,err.stack:',err.stack)
     })
+};
 
-    return redisClient;
+Component.prototype.name = '__online__';
+
+Component.prototype.connect = function (uid, sid) {
+    return new Promise(function (resolve, reject) {
+        if(typeof uid !== 'object'){
+            let tm = {};
+            tm[uid] = sid;
+            uid = tm;
+        }
+        this.redisClient.hmset(this.key, uid, function (err, reply) {
+            if(err){
+                return reject(err);
+            }
+            return resolve(reply);
+        })
+    })
+}
+
+Component.prototype.disconnect = function (uid) {
+    return new Promise(function (resolve, reject) {
+        this.redisClient.hdel(this.key, uid, function (err, reply) {
+            if(err){
+                return reject(err);
+            }
+            return resolve(reply);
+        })
+    })
+}
+
+Component.prototype.isConnect = function (uid) {
+    return new Promise(function (resolve, reject) {
+        this.redisClient.hget(this.key, uid, function (err, reply) {
+            if(err){
+                return reject(err);
+            }
+            return resolve(reply);
+        })
+    })
+}
+
+Component.prototype.getALL = function () {
+    return new Promise(function (resolve, reject) {
+        this.redisClient.hgetall(this.key, function (err, reply) {
+            if(err){
+                return reject(err);
+            }
+            return resolve(reply);
+        })
+    })
 }

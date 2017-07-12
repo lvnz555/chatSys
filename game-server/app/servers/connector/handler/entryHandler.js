@@ -14,44 +14,32 @@ var Handler = function(app) {
  * @param  {Function} next    next step callback
  * @return {Void}
  */
-Handler.prototype.entry = function(msg, session, next) {
-  next(null, {code: 200, msg: 'game server is ok.'});
-};
 
-Handler.prototype.logon = function (msg, session, next) {
+Handler.prototype.entry = function (msg, session, next) {
+	var ol = this.app.components.__online__;
 	let uid = msg.uid;
+
 	session.bind(uid);
+
+    ol.connect(uid, this.app.getServerId());
+
+    session.on('closed', onUserLeave.bind(null, this.app))
+
 	next(null, {code:200, res:true})
 }
 
 /**
- * Publish route for mqtt connector.
+ * User log out handler
  *
- * @param  {Object}   msg     request message
- * @param  {Object}   session current session object
- * @param  {Function} next    next step callback
- * @return {Void}
+ * @param {Object} app current application
+ * @param {Object} session current session object
+ *
  */
-Handler.prototype.publish = function(msg, session, next) {
-	var result = {
-		topic: 'publish',
-		payload: JSON.stringify({code: 200, msg: 'publish message is ok.'})
-	};
-  next(null, result);
-};
+var onUserLeave = function(app, session) {
+    if(!session || !session.uid) {
+        return;
+    }
+    var ol = app.components.__online__;
 
-/**
- * Subscribe route for mqtt connector.
- *
- * @param  {Object}   msg     request message
- * @param  {Object}   session current session object
- * @param  {Function} next    next step callback
- * @return {Void}
- */
-Handler.prototype.subscribe = function(msg, session, next) {
-	var result = {
-		topic: 'subscribe',
-		payload: JSON.stringify({code: 200, msg: 'subscribe message is ok.'})
-	};
-  next(null, result);
+    ol.disconnect(session.uid);
 };
