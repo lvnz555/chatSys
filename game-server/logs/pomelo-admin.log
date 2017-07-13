@@ -1,0 +1,11 @@
+[2017-07-13 20:29:31.659] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 3005
+[2017-07-13 20:29:31.676] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 3005
+[2017-07-13 20:29:32.716] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 3005
+[2017-07-13 20:29:32.744] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "chat", "127.0.0.1", 3005
+[2017-07-13 20:57:18.714] [INFO] pomelo-admin - [32m[MasterAgent] [39mclient user : admin login to master
+[2017-07-13 20:57:18.723] [DEBUG] pomelo-admin - [36m[MasterSocket] [39mdisconnect connector-server-1 connector {"main":"/Users/rinzz04/Desktop/lvnanzhen/chatSys/game-server/app.js","env":"development","id":"connector-server-1","host":"127.0.0.1","port":3150,"clientHost":"127.0.0.1","clientPort":3010,"frontend":"true","serverType":"connector","pid":2340}
+[2017-07-13 20:57:18.726] [DEBUG] pomelo-admin - [36m[MasterSocket] [39mdisconnect chat-server-1 chat {"main":"/Users/rinzz04/Desktop/lvnanzhen/chatSys/game-server/app.js","env":"development","id":"chat-server-1","host":"127.0.0.1","port":4150,"serverType":"chat","pid":2341}
+[2017-07-13 20:57:28.206] [INFO] pomelo-admin - [32m[MqttServer] [39m[MqttServer] listen on 3005
+[2017-07-13 20:57:28.224] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "master", "127.0.0.1", 3005
+[2017-07-13 20:57:28.933] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "connector", "127.0.0.1", 3005
+[2017-07-13 20:57:28.927] [INFO] pomelo-admin - [32m[ConsoleService] [39mtry to connect master: "chat", "127.0.0.1", 3005

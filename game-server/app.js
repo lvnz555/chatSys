@@ -16,7 +16,12 @@ app.configure('production|development', 'connector|chat', function(){
             connector : pomelo.connectors.hybridconnector
         });
     }
-    app.set('redisConfig', {
+    app.set('onlineConfig', {
+        host : '120.77.202.64',
+        port : 6379,
+        db : 0
+    })
+    app.set('roomConfig', {
         host : '120.77.202.64',
         port : 6379,
         db : 0

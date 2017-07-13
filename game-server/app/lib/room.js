@@ -16,7 +16,7 @@ var Component = function(app, opts) {
     this.app = app;
     this.opts = opts;
 
-    this.key = 'uid-sid'
+    this.key = '__room__'
 
     this.redisClient = redis.createClient(opts);
 
@@ -25,16 +25,16 @@ var Component = function(app, opts) {
     })
 };
 
-Component.prototype.name = '__online__';
+Component.prototype.name = '__room__';
 
-Component.prototype.connect = function (uid, sid) {
+Component.prototype.in = function (rid, sid) {
     return new Promise(function (resolve, reject) {
-        if(typeof uid !== 'object'){
+        if(typeof rid !== 'object'){
             let tm = {};
-            tm[uid] = sid;
-            uid = tm;
+            tm[rid] = sid;
+            rid = tm;
         }
-        this.redisClient.hmset(this.key, uid, function (err, reply) {
+        this.redisClient.hmset(this.key, rid, function (err, reply) {
             if(err){
                 return reject(err);
             }
@@ -43,9 +43,9 @@ Component.prototype.connect = function (uid, sid) {
     })
 }
 
-Component.prototype.disconnect = function (uid) {
+Component.prototype.out = function (rid) {
     return new Promise(function (resolve, reject) {
-        this.redisClient.hdel(this.key, uid, function (err, reply) {
+        this.redisClient.hdel(this.key, rid, function (err, reply) {
             if(err){
                 return reject(err);
             }
@@ -54,13 +54,13 @@ Component.prototype.disconnect = function (uid) {
     })
 }
 
-Component.prototype.isConnect = function (uid) {
+Component.prototype.getServerIdByrid = function (rid) {
     return new Promise(function (resolve, reject) {
-        this.redisClient.hget(this.key, uid, function (err, reply) {
+        this.redisClient.hget(this.key, rid, function (err, reply) {
             if(err){
                 return reject(err);
             }
-            return resolve(reply);
+            return resolve(reply && reply[rid]);
         })
     })
 }
